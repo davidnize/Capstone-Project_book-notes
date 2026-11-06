@@ -14,7 +14,10 @@
     <form action="/add" method="post" class="item">
       <input type="text" name="title" placeholder="Book Title" required>
       <input type="text" name="author" placeholder="Author">
-      <input type="number" name="rating" min="0" max="10" step="1" required>
+      <label class="rating-field">
+        <span>Rating (0–10)</span>
+        <input type="number" name="rating" min="0" max="10" step="1" placeholder="Rating (0–10)" required>
+      </label>
       <textarea name="notes" placeholder="Notes"></textarea>
       <button type="submit">➕ Add Book</button>
     </form>
@@ -40,7 +43,7 @@
             <%= book.title %>
           </h3>
           <p>
-            <%= book.author || "Unknown" %> · ⭐ <%= book.rating %>/10
+            <%= book.author || "Unknown" %> · <span class="rating">Rating: <%= book.rating %>/10</span>
           </p>
           <p>
             <%= book.notes %>
@@ -62,7 +65,10 @@
             <input type="hidden" name="bookId" value="<%= book.id %>">
             <input type="text" name="title" value="<%= book.title %>" required>
             <input type="text" name="author" value="<%= book.author || '' %>">
-            <input type="number" name="rating" value="<%= book.rating %>" min="0" max="10" step="1" required>
+            <label class="rating-field">
+              <span>Rating (0–10)</span>
+              <input type="number" name="rating" value="<%= book.rating %>" min="0" max="10" step="1" placeholder="Rating (0–10)" required>
+            </label>
             <input type="text" name="notes" value="<%= book.notes || '' %>">
             <button type="submit">Save</button>
             <button type="button" onclick="toggleEdit(`<%= book.id %>`)">Cancel</button>
@@ -80,7 +86,7 @@
   <script>
     function toggleEdit(id) {
       const form = document.getElementById("edit-" + id);
-      form.style.display = form.style.display === "none" ? "block" : "none";
+      form.style.display = form.style.display === "none" ? "flex" : "none";
     }
   </script>
 

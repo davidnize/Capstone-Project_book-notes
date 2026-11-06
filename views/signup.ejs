@@ -1,0 +1,24 @@
+<%- include('partials/header.ejs'); -%>
+
+  <h1>Create an account</h1>
+
+  <% if (error) { %>
+    <p class="notice notice-error"><%= error %></p>
+  <% } %>
+
+  <form action="/signup" method="post" class="auth-form">
+    <label>
+      Email
+      <input type="email" name="email" value="<%= email || '' %>" autocomplete="email" required>
+    </label>
+    <label>
+      Password
+      <span class="auth-hint">At least 8 characters.</span>
+      <input type="password" name="password" autocomplete="new-password" minlength="8" required>
+    </label>
+    <button type="submit">Sign up</button>
+  </form>
+
+  <p class="auth-switch">Already have an account? <a href="/login">Log in</a></p>
+
+<%- include('partials/footer.ejs'); -%>

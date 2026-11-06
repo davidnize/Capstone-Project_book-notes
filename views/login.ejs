@@ -1,0 +1,23 @@
+<%- include('partials/header.ejs'); -%>
+
+  <h1>Log in</h1>
+
+  <% if (error) { %>
+    <p class="notice notice-error"><%= error %></p>
+  <% } %>
+
+  <form action="/login" method="post" class="auth-form">
+    <label>
+      Email
+      <input type="email" name="email" value="<%= email || '' %>" autocomplete="email" required>
+    </label>
+    <label>
+      Password
+      <input type="password" name="password" autocomplete="current-password" required>
+    </label>
+    <button type="submit">Log in</button>
+  </form>
+
+  <p class="auth-switch">New here? <a href="/signup">Create an account</a></p>
+
+<%- include('partials/footer.ejs'); -%>

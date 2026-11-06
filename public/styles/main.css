@@ -68,6 +68,29 @@ h1 {
   font-size: 0.9rem;
 }
 
+.rating {
+  font-weight: 700;
+  color: #111;
+}
+
+.rating-field {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 0 0 auto;
+  align-self: flex-end;
+  color: #333;
+  font-size: 0.85rem;
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.rating-field input {
+  font-weight: 400;
+  width: 10.5rem;
+}
+
 textarea {
   padding: 12px;
   border: 1px solid #ccc;
@@ -112,7 +135,7 @@ form[action="/delete"] button {
 
 form[action="/edit"] {
   display: none;
-  align-items: center;
+  align-items: flex-end;
   gap: 10px;
   flex-wrap: wrap;
   margin-top: 15px;
@@ -125,6 +148,76 @@ form[action="/edit"].visible {
 
 hr {
   display: none;
+}
+
+.account-bar {
+  max-width: 1100px;
+  margin: 0 auto 8px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  color: #555;
+}
+
+.account-bar span {
+  overflow-wrap: anywhere;
+}
+
+.account-bar form {
+  margin: 0;
+}
+
+.account-bar button {
+  margin-right: 0;
+  background: white;
+  color: #111;
+  border: 1px solid #ccc;
+}
+
+.auth-form {
+  max-width: 420px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background: white;
+  padding: 25px;
+  border-radius: 20px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+.auth-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.auth-form input {
+  width: 100%;
+  box-sizing: border-box;
+  font-weight: 400;
+}
+
+.auth-form button {
+  background: #111;
+  color: white;
+}
+
+.auth-hint {
+  font-weight: 400;
+  color: #777;
+  font-size: 0.85rem;
+}
+
+.auth-switch {
+  text-align: center;
+}
+
+.auth-switch a {
+  color: #111;
 }
 
 footer {
