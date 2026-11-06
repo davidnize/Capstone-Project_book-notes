@@ -108,8 +108,32 @@
   </div>
 
   <script>
+    function fitNotes(textarea) {
+      const input = textarea.closest(".field-row")?.querySelector("input");
+      const floor = input ? input.offsetHeight : 46;
+      textarea.style.height = floor + "px";
+      textarea.style.height = Math.max(floor, textarea.scrollHeight) + "px";
+    }
+
+    function watchNotes(textarea) {
+      textarea.addEventListener("input", () => fitNotes(textarea));
+      if (textarea.offsetParent !== null) fitNotes(textarea);
+    }
+
+    document.querySelectorAll(".field-notes textarea").forEach(watchNotes);
+
+    window.addEventListener("resize", () => {
+      document.querySelectorAll(".field-notes textarea").forEach((textarea) => {
+        if (textarea.offsetParent !== null) fitNotes(textarea);
+      });
+    });
+
     function toggleEdit(id) {
-      document.getElementById("edit-" + id).classList.toggle("is-open");
+      const form = document.getElementById("edit-" + id);
+      form.classList.toggle("is-open");
+      if (form.classList.contains("is-open")) {
+        fitNotes(form.querySelector("textarea"));
+      }
     }
   </script>
 

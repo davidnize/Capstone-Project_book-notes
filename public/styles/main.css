@@ -88,7 +88,7 @@ h2 {
 
 .field textarea {
   resize: vertical;
-  overflow: auto;
+  overflow: hidden;
 }
 
 .form-actions {
