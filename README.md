@@ -1,73 +1,112 @@
 # Book Notes
 
-A small Express app for keeping notes on books. Search a title, and [Open Library](https://openlibrary.org/) fills in the author and cover. Notes, ratings, and covers are stored in PostgreSQL.
+A simple web application for keeping track of books you've read or want to remember. Add a book using its title, give it a rating, and write down your thoughts or notes.
 
-The UI is the EJS book-notes capstone from [davidnize/Backend](https://github.com/davidnize/Backend/tree/main/5.0%20PostgreSQL/Capstone-Project_book-notes), adapted to run on Render with Managed PostgreSQL.
+## Features
 
-## Run locally
+- **Add books by title:** You don't need to enter the author's name or upload a book cover. Simply provide the book title.
+- **Automatic book lookup:** The application uses the [Open Library API](https://openlibrary.org/developers/api) to search for the book and retrieve available information, including its author and cover image.
+- **Book ratings:** Rate books on a scale of 0 to 10.
+- **Personal notes:** Write down your thoughts, observations, and anything you want to remember about a book.
+- **Edit books:** Update a book's title, rating, and notes.
+- **Delete books:** Remove books you no longer want in your collection.
+- **Persistent storage:** Book information is stored in PostgreSQL, so your collection remains available between application restarts.
+- **Recently added books:** Your collection displays the newest additions first.
 
-You need Node.js 20+ and a PostgreSQL database.
+## How It Works
+
+1. Enter the title of a book.
+2. The application searches Open Library using the title.
+3. If a matching result is found, it retrieves the available author information and cover image.
+4. Add your rating and personal notes.
+5. Save the book to your collection.
+
+You don't have to know the author's name beforehand. The title alone is enough to start the lookup.
+
+## Technologies Used
+
+- **Node.js** – JavaScript runtime.
+- **Express.js** – Backend web framework.
+- **EJS** – Server-side rendering and HTML templating.
+- **PostgreSQL** – Database for storing book information.
+- **Axios** – Making HTTP requests to the Open Library API.
+- **Open Library API** – Retrieving book information and cover images.
+- **CSS** – Styling the application.
+
+## Getting Started
+
+### Requirements
+
+- Node.js 20 or later
+- PostgreSQL database
+- npm
+
+### Installation
+
+Clone the repository:
+
+```bash
+git clone https://github.com/davidnize/Capstone-Project_book-notes.git
+```
+
+Navigate into the project directory:
+
+```bash
+cd Capstone-Project_book-notes
+```
+
+Install dependencies:
 
 ```bash
 npm install
-cp .env.example .env
 ```
 
-Edit `.env` and set `DATABASE_URL` to your database, for example:
+### Environment Variables
+
+Create a `.env` file in the project root and add your PostgreSQL connection string:
+
+```env
+DATABASE_URL=your_postgresql_connection_string
+```
+
+### Running the Application
+
+Start the server using Node.js:
 
 ```bash
-DATABASE_URL=postgres://postgres:postgres@localhost:5432/book_notes
+node index.js
 ```
 
-Create the database if it does not exist (`createdb book_notes`), then start the app:
+Or use Nodemon during development so the server restarts automatically when you make changes:
 
 ```bash
-npm start
+nodemon index.js
 ```
 
-The server listens on `0.0.0.0` and `PORT` (default `3000`). On startup it runs `schema.sql`, which creates the `books` table if it is missing.
+Open your browser and visit:
 
-Open [http://localhost:3000](http://localhost:3000). Adding or editing a book looks the title up on Open Library. If nothing matches, or Open Library cannot be reached, the app redirects back with a message and does not write a row.
+```text
+http://localhost:3000
+```
 
-Do not commit `.env`. It is listed in `.gitignore`.
+The application automatically initializes the database table using `schema.sql` when the server starts.
 
-## Deploy on Render
+## Database
 
-`render.yaml` is a Blueprint that creates:
+The application uses PostgreSQL to store:
 
-- a Node **web service** named `book-notes` (`plan: free`, `npm install`, `npm start`)
-- a **PostgreSQL** database named `book-notes-db` (`plan: free`, database `book_notes`)
-- `DATABASE_URL` from that database’s internal `connectionString`
-- `NODE_ENV=production`
+- Book ID
+- Title
+- Author
+- Rating
+- Personal notes
+- Cover image URL
+- Date added
 
-Both resources are in `oregon` so the web service uses the private-network connection string.
+## Deployment
 
-After this repo is on GitHub, GitLab, or Bitbucket:
+The project includes a `render.yaml` configuration for deployment on [Render](https://render.com), including a web service and PostgreSQL database.
 
-1. Open the [Render Blueprint dashboard](https://dashboard.render.com/blueprint/new).
-2. Point it at the repository.
-3. Review the web service and database, then apply the Blueprint.
+---
 
-Render injects `PORT`. The app binds `0.0.0.0` and creates the `books` table on boot, so a fresh database works without a manual migration.
-
-### Connection and SSL
-
-`fromDatabase.connectionString` is the **internal** URL. Internal Render Postgres does not use TLS, so the app leaves SSL off for that URL.
-
-SSL is turned on (`rejectUnauthorized: false`) only when the URL needs it:
-
-- the host ends with `.render.com` (external connection string), or
-- the URL sets `sslmode` to `require`, `verify-full`, `verify-ca`, or `prefer`.
-
-Use the internal URL for the Render web service. Use an external URL, with SSL, only from your laptop or CI.
-
-### Free plan limits
-
-Verified against Render’s current free-plan docs:
-
-- **Free web services** spin down after about 15 minutes without traffic. The next request cold-starts the service. The filesystem is ephemeral.
-- **Free Postgres** is limited to one database per workspace, 1 GB of storage, and **expires 30 days after creation**. After that, you have 14 days to upgrade before Render deletes it. Free databases have no backups and no managed connection pooling, and Render may restart them at any time.
-- A workspace can have only one free Postgres instance and one free Key Value instance.
-- The web service and database must stay in the **same region**. The internal connection string only works that way.
-
-Paid plans remove the 30-day database expiry. `free` is a current plan id; `basic-256mb` is the legacy name for the paid `0.1c-256mb` plan, not an alias of free.
+Built as a book-notes application to make keeping track of books simple, without requiring users to manually enter every book detail.
