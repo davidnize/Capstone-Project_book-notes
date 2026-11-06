@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: book-notes
+    runtime: node
+    plan: free
+    region: oregon
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: book-notes-db
+          property: connectionString
+      - key: NODE_ENV
+        value: production
+
+databases:
+  - name: book-notes-db
+    databaseName: book_notes
+    plan: free
+    region: oregon

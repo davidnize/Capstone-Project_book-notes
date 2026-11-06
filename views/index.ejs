@@ -1,0 +1,87 @@
+<%- include('partials/header.ejs'); -%>
+
+  <h1>📚 My Book Notes</h1>
+
+  <% if (error) { %>
+    <p class="notice notice-error"><%= error %></p>
+  <% } %>
+  <% if (message) { %>
+    <p class="notice"><%= message %></p>
+  <% } %>
+
+  <div class="box">
+
+    <form action="/add" method="post" class="item">
+      <input type="text" name="title" placeholder="Book Title" required>
+      <input type="text" name="author" placeholder="Author">
+      <input type="number" name="rating" min="0" max="10" step="1" required>
+      <textarea name="notes" placeholder="Notes"></textarea>
+      <button type="submit">➕ Add Book</button>
+    </form>
+
+    <hr>
+
+    <% if (!books.length) { %>
+      <p class="empty">No books yet. Add a title and Open Library will fill in the cover when it finds a match.</p>
+    <% } %>
+
+    <% for (let book of books) { %>
+
+      <div class="item">
+
+        <% if (book.cover_url) { %>
+          <img src="<%= book.cover_url %>" alt="Cover of <%= book.title %>">
+        <% } else { %>
+          <p class="no-cover">No Cover</p>
+        <% } %>
+
+        <div>
+          <h3 id="title-<%= book.id %>">
+            <%= book.title %>
+          </h3>
+          <p>
+            <%= book.author || "Unknown" %> · ⭐ <%= book.rating %>/10
+          </p>
+          <p>
+            <%= book.notes %>
+          </p>
+          <p>
+            <% if (book.created_at) { %>
+              <%= book.created_at.toDateString() %> · <%= book.created_at.toLocaleTimeString() %>
+            <% } %>
+          </p>
+
+          <button type="button" onclick="toggleEdit(`<%= book.id %>`)">Edit</button>
+
+          <form action="/delete" method="post" style="display:inline;">
+            <input type="hidden" name="deleteBookId" value="<%= book.id %>">
+            <button type="submit">Delete</button>
+          </form>
+
+          <form action="/edit" method="post" id="edit-<%= book.id %>" style="display:none;">
+            <input type="hidden" name="bookId" value="<%= book.id %>">
+            <input type="text" name="title" value="<%= book.title %>" required>
+            <input type="text" name="author" value="<%= book.author || '' %>">
+            <input type="number" name="rating" value="<%= book.rating %>" min="0" max="10" step="1" required>
+            <input type="text" name="notes" value="<%= book.notes || '' %>">
+            <button type="submit">Save</button>
+            <button type="button" onclick="toggleEdit(`<%= book.id %>`)">Cancel</button>
+          </form>
+        </div>
+
+      </div>
+
+      <hr>
+
+    <% } %>
+
+  </div>
+
+  <script>
+    function toggleEdit(id) {
+      const form = document.getElementById("edit-" + id);
+      form.style.display = form.style.display === "none" ? "block" : "none";
+    }
+  </script>
+
+<%- include('partials/footer.ejs'); -%>

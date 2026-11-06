@@ -1,0 +1,28 @@
+{
+  "name": "book-notes",
+  "version": "1.0.0",
+  "description": "Book notes app with Express, EJS, and PostgreSQL, adapted for Render.",
+  "type": "module",
+  "main": "index.js",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [
+    "books",
+    "notes",
+    "express",
+    "postgresql"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.16.0",
+    "body-parser": "^2.2.2",
+    "ejs": "^5.0.2",
+    "express": "^5.2.1",
+    "pg": "^8.20.0"
+  }
+}
