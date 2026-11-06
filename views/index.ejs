@@ -13,22 +13,24 @@
 
     <form action="/add" method="post" class="panel book-form">
       <h2>Add a book</h2>
-      <label class="field">
-        <span>Title</span>
-        <input type="text" name="title" placeholder="Book title" required>
-      </label>
-      <label class="field">
-        <span>Author</span>
-        <input type="text" name="author" placeholder="Author">
-      </label>
-      <label class="field">
-        <span>Rating (0–10)</span>
-        <input type="number" name="rating" min="0" max="10" step="1" placeholder="0–10" required>
-      </label>
-      <label class="field">
-        <span>Notes</span>
-        <textarea name="notes" placeholder="Notes"></textarea>
-      </label>
+      <div class="field-row">
+        <label class="field field-title">
+          <span>Title</span>
+          <input type="text" name="title" placeholder="Book title" required>
+        </label>
+        <label class="field field-author">
+          <span>Author</span>
+          <input type="text" name="author" placeholder="Author">
+        </label>
+        <label class="field field-rating">
+          <span>Rating (0–10)</span>
+          <input type="number" name="rating" min="0" max="10" step="1" placeholder="0–10" required>
+        </label>
+        <label class="field field-notes">
+          <span>Notes</span>
+          <textarea name="notes" rows="4" placeholder="Notes"></textarea>
+        </label>
+      </div>
       <div class="form-actions">
         <button type="submit" class="primary">➕ Add Book</button>
       </div>
@@ -51,14 +53,12 @@
         <% } %>
 
         <div class="book-body">
-          <h3 class="book-title" id="title-<%= book.id %>">
-            <%= book.title %>
-          </h3>
-          <p class="book-author"><%= book.author || "Unknown" %></p>
-          <p class="book-rating">Rating: <%= book.rating %>/10</p>
-          <% if (book.notes) { %>
-            <p class="book-notes"><%= book.notes %></p>
-          <% } %>
+          <div class="book-line">
+            <h3 class="book-title" id="title-<%= book.id %>"><%= book.title %></h3>
+            <p class="book-author"><%= book.author || "Unknown" %></p>
+            <p class="book-rating">Rating: <%= book.rating %>/10</p>
+            <p class="book-notes<%= book.notes ? "" : " is-empty" %>"><%= book.notes || "No notes" %></p>
+          </div>
           <% if (book.created_at) { %>
             <p class="book-meta">
               <%= book.created_at.toDateString() %> · <%= book.created_at.toLocaleTimeString() %>
@@ -72,32 +72,34 @@
               <button type="submit" class="danger">Delete</button>
             </form>
           </div>
+        </div>
 
-          <form action="/edit" method="post" id="edit-<%= book.id %>" class="edit-form">
-            <p class="edit-heading">Edit book</p>
-            <input type="hidden" name="bookId" value="<%= book.id %>">
-            <label class="field">
+        <form action="/edit" method="post" id="edit-<%= book.id %>" class="edit-form">
+          <p class="edit-heading">Edit book</p>
+          <input type="hidden" name="bookId" value="<%= book.id %>">
+          <div class="field-row">
+            <label class="field field-title">
               <span>Title</span>
               <input type="text" name="title" value="<%= book.title %>" required>
             </label>
-            <label class="field">
+            <label class="field field-author">
               <span>Author</span>
               <input type="text" name="author" value="<%= book.author || '' %>">
             </label>
-            <label class="field">
+            <label class="field field-rating">
               <span>Rating (0–10)</span>
               <input type="number" name="rating" value="<%= book.rating %>" min="0" max="10" step="1" placeholder="0–10" required>
             </label>
-            <label class="field">
+            <label class="field field-notes">
               <span>Notes</span>
-              <textarea name="notes"><%= book.notes || '' %></textarea>
+              <textarea name="notes" rows="4"><%= book.notes || '' %></textarea>
             </label>
-            <div class="form-actions">
-              <button type="submit" class="primary">Save</button>
-              <button type="button" class="secondary" onclick="toggleEdit(`<%= book.id %>`)">Cancel</button>
-            </div>
-          </form>
-        </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="primary">Save</button>
+            <button type="button" class="secondary" onclick="toggleEdit(`<%= book.id %>`)">Cancel</button>
+          </div>
+        </form>
 
       </article>
 
