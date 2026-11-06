@@ -1,83 +1,128 @@
 # Book Notes
 
-A small Express app for keeping notes on books. Search a title, and [Open Library](https://openlibrary.org/) fills in the author and cover. Notes, ratings, and covers are stored in PostgreSQL. Sign in with an email and password; each account only sees its own books.
+A simple web application for keeping track of books you've read or want to remember. Add a book using its title, give it a rating, and write down your thoughts or notes. Sign in so each account keeps its own list.
 
-The UI is the EJS book-notes capstone from [davidnize/Backend](https://github.com/davidnize/Backend/tree/main/5.0%20PostgreSQL/Capstone-Project_book-notes), adapted to run on Render with Managed PostgreSQL.
+## Live Demo
 
-## Run locally
+Try the application here:
 
-You need Node.js 20+ and a PostgreSQL database.
+[Book Notes – Live Application](https://book-notes-lqwi.onrender.com/)
+
+## Features
+
+- **Add books by title:** Simply enter a book title. You don't need to provide the author's name or upload a cover.
+- **Automatic book lookup:** Uses the Open Library API to retrieve available author information and book cover images.
+- **Book ratings:** Rate books on a scale of 0 to 10.
+- **Personal notes:** Save your thoughts and observations about each book.
+- **Edit books:** Update existing book information, ratings, and notes.
+- **Delete books:** Remove books from your collection.
+- **Private accounts:** Sign up and log in with an email and password. Each person only sees their own books.
+- **Persistent storage:** Stores book information in PostgreSQL.
+- **Recently added books:** Displays the newest additions first.
+
+## How It Works
+
+1. Create an account or log in.
+2. Enter the title of a book.
+3. The application searches Open Library using the title.
+4. If a matching result is found, it retrieves the available author information and cover image.
+5. Add your rating and personal notes.
+6. Save the book to your collection.
+
+You don't have to know the author's name beforehand. The title alone is enough to start the lookup.
+
+## Technologies Used
+
+- **Node.js** – JavaScript runtime.
+- **Express.js** – Backend web framework.
+- **EJS** – Server-side rendering and HTML templating.
+- **PostgreSQL** – Database for storing book information.
+- **Axios** – Making HTTP requests to the Open Library API.
+- **Open Library API** – Retrieving book information and cover images.
+- **CSS** – Styling the application.
+
+## Getting Started
+
+### Requirements
+
+- Node.js 20 or later
+- PostgreSQL database
+- npm
+
+### Installation
+
+Clone the repository:
+
+```bash
+git clone https://github.com/davidnize/Capstone-Project_book-notes.git
+```
+
+Navigate into the project directory:
+
+```bash
+cd Capstone-Project_book-notes
+```
+
+Install dependencies:
 
 ```bash
 npm install
-cp .env.example .env
 ```
 
-Edit `.env` and set `DATABASE_URL` to your database, for example:
+### Environment Variables
+
+Create a `.env` file in the project root and add your PostgreSQL connection string and a long random string for the login cookie:
+
+```env
+DATABASE_URL=your_postgresql_connection_string
+SESSION_SECRET=a-long-random-string
+```
+
+`SESSION_SECRET` signs the login cookie. Do not commit `.env`. On Render, `render.yaml` generates `SESSION_SECRET` for you.
+
+### Running the Application
+
+Start the server using Node.js:
 
 ```bash
-DATABASE_URL=postgres://postgres:postgres@localhost:5432/book_notes
-SESSION_SECRET=replace-with-a-long-random-string
+node index.js
 ```
 
-`SESSION_SECRET` signs the login cookie. Use a long random string. If a `.env` file is present, the app loads it and does not override variables that are already set in the environment.
-
-Create the database if it does not exist (`createdb book_notes`), then start the app:
+Or use Nodemon during development so the server restarts automatically when you make changes:
 
 ```bash
-npm start
+nodemon index.js
 ```
 
-The server listens on `0.0.0.0` and `PORT` (default `3000`). On startup it runs `schema.sql`, which creates the `users` and `books` tables if they are missing and adds `books.user_id` on older databases.
+Open your browser and visit:
 
-Open [http://localhost:3000](http://localhost:3000). Create an account, then add books. Adding or editing a book looks the title up on Open Library. If nothing matches, or Open Library cannot be reached, the app redirects back with a message and does not write a row.
+```text
+http://localhost:3000
+```
+
+The application automatically initializes the database tables using `schema.sql` when the server starts.
 
 ## Accounts
 
-Sign up and log in with an email and a password of at least 8 characters. Passwords are stored as bcrypt hashes. The home page, and add, edit, and delete, require a signed-in user and only read or change that user’s books. Signed-out visitors are redirected to the login page.
+Sign up and log in with an email and a password of at least 8 characters. Passwords are stored as bcrypt hashes. The book list, and add, edit, and delete, require a signed-in user and only change that user’s books. Signed-out visitors are redirected to the login page.
 
-On Render, `render.yaml` sets `SESSION_SECRET` with `generateValue: true`, so the platform creates the secret and it is not committed. Books saved before accounts existed have no owner; they stay in the database and are not shown.
+## Database
 
-Do not commit `.env`. It is listed in `.gitignore`.
+The application uses PostgreSQL to store:
 
-## Deploy on Render
+- Book ID
+- Title
+- Author
+- Rating
+- Personal notes
+- Cover image URL
+- Date added
+- The user who owns the book
 
-`render.yaml` is a Blueprint that creates:
+## Deployment
 
-- a Node **web service** named `book-notes` (`plan: free`, `npm install`, `npm start`)
-- a **PostgreSQL** database named `book-notes-db` (`plan: free`, database `book_notes`)
-- `DATABASE_URL` from that database’s internal `connectionString`
-- `NODE_ENV=production`
-- `SESSION_SECRET`, generated by Render (`generateValue: true`) and not stored in the repo
+The project includes a `render.yaml` configuration for deployment on [Render](https://render.com), including a web service and PostgreSQL database. The Blueprint sets `DATABASE_URL` from that database and generates `SESSION_SECRET`.
 
-Both resources are in `oregon` so the web service uses the private-network connection string.
+---
 
-After this repo is on GitHub, GitLab, or Bitbucket:
-
-1. Open the [Render Blueprint dashboard](https://dashboard.render.com/blueprint/new).
-2. Point it at the repository.
-3. Review the web service and database, then apply the Blueprint.
-
-Render injects `PORT`. The app binds `0.0.0.0` and creates the tables on boot, so a fresh database works without a manual migration.
-
-### Connection and SSL
-
-`fromDatabase.connectionString` is the **internal** URL. Internal Render Postgres does not use TLS, so the app leaves SSL off for that URL.
-
-SSL is turned on (`rejectUnauthorized: false`) only when the URL needs it:
-
-- the host ends with `.render.com` (external connection string), or
-- the URL sets `sslmode` to `require`, `verify-full`, `verify-ca`, or `prefer`.
-
-Use the internal URL for the Render web service. Use an external URL, with SSL, only from your laptop or CI.
-
-### Free plan limits
-
-Verified against Render’s current free-plan docs:
-
-- **Free web services** spin down after about 15 minutes without traffic. The next request cold-starts the service. The filesystem is ephemeral.
-- **Free Postgres** is limited to one database per workspace, 1 GB of storage, and **expires 30 days after creation**. After that, you have 14 days to upgrade before Render deletes it. Free databases have no backups and no managed connection pooling, and Render may restart them at any time.
-- A workspace can have only one free Postgres instance and one free Key Value instance.
-- The web service and database must stay in the **same region**. The internal connection string only works that way.
-
-Paid plans remove the 30-day database expiry. `free` is a current plan id; `basic-256mb` is the legacy name for the paid `0.1c-256mb` plan, not an alias of free.
+Built as a book-notes application to make keeping track of books simple, without requiring users to manually enter every book detail.

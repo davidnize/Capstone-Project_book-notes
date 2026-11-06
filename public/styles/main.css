@@ -367,23 +367,112 @@ footer {
   text-align: center;
 }
 
-@media (max-width: 720px) {
+/* Phones and other narrow viewports only. Rules above this query are the desktop layout. */
+@media (max-width: 768px) {
   body {
-    padding: 16px;
+    margin: 0;
+    padding: 16px 12px 28px;
   }
 
-  .book-card {
+  h1 {
+    margin-bottom: 16px;
+    font-size: 1.55rem;
+  }
+
+  .box,
+  .notice,
+  .empty {
+    max-width: 100%;
+  }
+
+  .item:first-child {
     flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    margin-bottom: 14px;
   }
 
+  .item:first-child input,
+  .item:first-child textarea,
+  .item:first-child button {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    margin-right: 0;
+  }
+
+  .item,
+  .book-card {
+    align-items: flex-start;
+    gap: 12px;
+    max-width: 100%;
+    padding: 12px;
+    margin-bottom: 12px;
+    border-radius: 14px;
+  }
+
+  .item img,
+  .item > .no-cover,
   .book-card img,
-  .no-cover {
-    width: 112px;
-    height: 160px;
+  .book-card > .no-cover {
+    width: 78px;
+    height: 112px;
+    min-height: 112px;
+    max-width: 78px;
+    flex: 0 0 78px;
+    margin: 0;
+    object-fit: cover;
+    border-radius: 8px;
+    box-sizing: border-box;
   }
 
+  .item div,
+  .book-body {
+    min-width: 0;
+  }
+
+  .item h3,
   .book-title {
-    font-size: 1.3rem;
+    margin: 0 0 4px;
+    font-size: 1.12rem;
+    line-height: 1.3;
+    overflow-wrap: break-word;
+  }
+
+  .item p,
+  .book-author,
+  .book-rating,
+  .book-notes,
+  .book-meta {
+    margin: 6px 0;
+    overflow-wrap: break-word;
+  }
+
+  .item p:nth-of-type(1),
+  .book-author {
+    margin-top: 0;
+    font-size: 0.92rem;
+  }
+
+  .item p:nth-of-type(2) {
+    padding: 8px 10px;
+    font-size: 0.92rem;
+    line-height: 1.4;
+  }
+
+  .item p:nth-of-type(3),
+  .book-meta {
+    font-size: 0.78rem;
+  }
+
+  .item > .no-cover,
+  .book-card > .no-cover {
+    padding: 6px;
+    font-size: 0.7rem;
+    line-height: 1.2;
+    text-align: center;
+    color: #777;
   }
 
   .field-title,
@@ -397,5 +486,26 @@ footer {
   .book-notes {
     flex: 1 1 100%;
     min-width: 0;
+  }
+
+  textarea {
+    resize: vertical;
+    max-width: 100%;
+  }
+
+  button {
+    padding: 8px 12px;
+    margin-right: 6px;
+    margin-bottom: 4px;
+  }
+
+  form[action="/edit"] input,
+  form[action="/edit"] button {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    margin: 0 0 8px;
   }
 }
