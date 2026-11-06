@@ -80,13 +80,15 @@ h2 {
 .field textarea {
   width: 100%;
   box-sizing: border-box;
+  height: 46px;
+  min-height: 46px;
   font-weight: 400;
+  line-height: 1.2;
 }
 
 .field textarea {
-  min-height: 120px;
-  height: 120px;
   resize: vertical;
+  overflow: auto;
 }
 
 .form-actions {
@@ -395,10 +397,5 @@ footer {
   .book-notes {
     flex: 1 1 100%;
     min-width: 0;
-  }
-
-  .field textarea {
-    min-height: 140px;
-    height: 140px;
   }
 }
