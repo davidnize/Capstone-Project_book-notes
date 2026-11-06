@@ -2,16 +2,22 @@
 
 A simple web application for keeping track of books you've read or want to remember. Add a book using its title, give it a rating, and write down your thoughts or notes.
 
+## Live Demo
+
+Try the application here:
+
+[Book Notes – Live Application](https://book-notes-lqwi.onrender.com/)
+
 ## Features
 
-- **Add books by title:** You don't need to enter the author's name or upload a book cover. Simply provide the book title.
-- **Automatic book lookup:** The application uses the [Open Library API](https://openlibrary.org/developers/api) to search for the book and retrieve available information, including its author and cover image.
+- **Add books by title:** Simply enter a book title. You don't need to provide the author's name or upload a cover.
+- **Automatic book lookup:** Uses the Open Library API to retrieve available author information and book cover images.
 - **Book ratings:** Rate books on a scale of 0 to 10.
-- **Personal notes:** Write down your thoughts, observations, and anything you want to remember about a book.
-- **Edit books:** Update a book's title, rating, and notes.
-- **Delete books:** Remove books you no longer want in your collection.
-- **Persistent storage:** Book information is stored in PostgreSQL, so your collection remains available between application restarts.
-- **Recently added books:** Your collection displays the newest additions first.
+- **Personal notes:** Save your thoughts and observations about each book.
+- **Edit books:** Update existing book information, ratings, and notes.
+- **Delete books:** Remove books from your collection.
+- **Persistent storage:** Stores book information in PostgreSQL.
+- **Recently added books:** Displays the newest additions first.
 
 ## How It Works
 
