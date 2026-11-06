@@ -1,6 +1,6 @@
 # Book Notes
 
-A simple web application for keeping track of books you've read or want to remember. Add a book using its title, give it a rating, and write down your thoughts or notes.
+A simple web application for keeping track of books you've read or want to remember. Add a book using its title, give it a rating, and write down your thoughts or notes. Sign in so each account keeps its own list.
 
 ## Live Demo
 
@@ -16,16 +16,18 @@ Try the application here:
 - **Personal notes:** Save your thoughts and observations about each book.
 - **Edit books:** Update existing book information, ratings, and notes.
 - **Delete books:** Remove books from your collection.
+- **Private accounts:** Sign up and log in with an email and password. Each person only sees their own books.
 - **Persistent storage:** Stores book information in PostgreSQL.
 - **Recently added books:** Displays the newest additions first.
 
 ## How It Works
 
-1. Enter the title of a book.
-2. The application searches Open Library using the title.
-3. If a matching result is found, it retrieves the available author information and cover image.
-4. Add your rating and personal notes.
-5. Save the book to your collection.
+1. Create an account or log in.
+2. Enter the title of a book.
+3. The application searches Open Library using the title.
+4. If a matching result is found, it retrieves the available author information and cover image.
+5. Add your rating and personal notes.
+6. Save the book to your collection.
 
 You don't have to know the author's name beforehand. The title alone is enough to start the lookup.
 
@@ -69,11 +71,14 @@ npm install
 
 ### Environment Variables
 
-Create a `.env` file in the project root and add your PostgreSQL connection string:
+Create a `.env` file in the project root and add your PostgreSQL connection string and a long random string for the login cookie:
 
 ```env
 DATABASE_URL=your_postgresql_connection_string
+SESSION_SECRET=a-long-random-string
 ```
+
+`SESSION_SECRET` signs the login cookie. Do not commit `.env`. On Render, `render.yaml` generates `SESSION_SECRET` for you.
 
 ### Running the Application
 
@@ -95,7 +100,11 @@ Open your browser and visit:
 http://localhost:3000
 ```
 
-The application automatically initializes the database table using `schema.sql` when the server starts.
+The application automatically initializes the database tables using `schema.sql` when the server starts.
+
+## Accounts
+
+Sign up and log in with an email and a password of at least 8 characters. Passwords are stored as bcrypt hashes. The book list, and add, edit, and delete, require a signed-in user and only change that user’s books. Signed-out visitors are redirected to the login page.
 
 ## Database
 
@@ -108,10 +117,11 @@ The application uses PostgreSQL to store:
 - Personal notes
 - Cover image URL
 - Date added
+- The user who owns the book
 
 ## Deployment
 
-The project includes a `render.yaml` configuration for deployment on [Render](https://render.com), including a web service and PostgreSQL database.
+The project includes a `render.yaml` configuration for deployment on [Render](https://render.com), including a web service and PostgreSQL database. The Blueprint sets `DATABASE_URL` from that database and generates `SESSION_SECRET`.
 
 ---
 

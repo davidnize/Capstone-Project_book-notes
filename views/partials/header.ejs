@@ -10,4 +10,12 @@
 </head>
 
 <body>
+  <% if (user) { %>
+    <header class="account-bar">
+      <span><%= user.email %></span>
+      <form action="/logout" method="post">
+        <button type="submit">Log out</button>
+      </form>
+    </header>
+  <% } %>
   <main>
